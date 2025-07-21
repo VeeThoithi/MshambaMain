@@ -48,7 +48,7 @@ export const AllInvestments = ({ onBack, onInvest, hasWallet }) => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gray-900 text-white w-full">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center mb-8">
           <button 

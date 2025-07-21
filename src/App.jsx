@@ -8,6 +8,13 @@ import { Sidebar } from './components/Sidebar';
 import { WalletConnect } from './components/WalletConnect';
 import { WalletDashboard } from './components/WalletDashboard';
 import { InvestmentModal } from './components/InvestmentModal';
+import { FarmListing } from './pages/FarmListing';
+import { MarketAnalysis } from './pages/MarketAnalysis';
+import { AllInvestments } from './pages/AllInvestments';
+import { MyInvestments } from './pages/MyInvestments';
+import { Auth } from './pages/Auth';
+import { SupplyChain } from './pages/SupplyChain';
+import { Chat } from './pages/Chat';
 import { useInvestments } from './hooks/useInvestments';
 import './styles/globals.css';
 
@@ -23,6 +30,9 @@ function App() {
     showInvestmentModal,
     setShowInvestmentModal,
     selectedFarm,
+    currentPage,
+    authMode,
+    setAuthMode,
     timeframes,
     farmListings,
     myInvestments,
@@ -36,11 +46,68 @@ function App() {
     handleListFarm,
     handleBrowseInvestments,
     handleMarketAnalysis,
+    handleMyInvestments,
+    handleBackToDashboard,
+    handleLogin,
+    handleSignup,
+    handleSupplyChain,
+    handleChat,
   } = useInvestments();
 
+  // Render different pages based on currentPage state
+  if (currentPage === 'auth') {
+    return (
+      <Auth 
+        onBack={handleBackToDashboard} 
+        mode={authMode}
+        onModeChange={setAuthMode}
+      />
+    );
+  }
+
+  if (currentPage === 'supply-chain') {
+    return <SupplyChain onBack={handleBackToDashboard} />;
+  }
+
+  if (currentPage === 'chat') {
+    return <Chat onBack={handleBackToDashboard} />;
+  }
+
+  if (currentPage === 'farm-listing') {
+    return <FarmListing onBack={handleBackToDashboard} />;
+  }
+
+  if (currentPage === 'market-analysis') {
+    return <MarketAnalysis onBack={handleBackToDashboard} />;
+  }
+
+  if (currentPage === 'all-investments') {
+    return (
+      <AllInvestments 
+        onBack={handleBackToDashboard} 
+        onInvest={handleInvest}
+        hasWallet={!!wallet}
+      />
+    );
+  }
+
+  if (currentPage === 'my-investments') {
+    return <MyInvestments onBack={handleBackToDashboard} />;
+  }
+
+  // Default dashboard view
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <Header onListFarm={handleListFarm} />
+      <Header 
+        onListFarm={handleListFarm}
+        onMyInvestments={handleMyInvestments}
+        onMarketAnalysis={handleMarketAnalysis}
+        onBrowseInvestments={handleBrowseInvestments}
+        onSupplyChain={handleSupplyChain}
+        onChat={handleChat}
+        onLogin={handleLogin}
+        onSignup={handleSignup}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -99,6 +166,8 @@ function App() {
               onListFarm={handleListFarm}
               onBrowseInvestments={handleBrowseInvestments}
               onMarketAnalysis={handleMarketAnalysis}
+              onSupplyChain={handleSupplyChain}
+              onChat={handleChat}
               onConnectWallet={handleConnectWallet}
             />
           </div>

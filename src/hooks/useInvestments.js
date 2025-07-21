@@ -4,30 +4,86 @@ import { farmListings, myInvestments, investmentData, cropYieldData } from '../d
 export const useInvestments = () => {
   const [activeTimeframe, setActiveTimeframe] = useState('6M');
   const [activeTab, setActiveTab] = useState('investments');
+  const [wallet, setWallet] = useState(null);
+  const [showWalletConnect, setShowWalletConnect] = useState(false);
+  const [showInvestmentModal, setShowInvestmentModal] = useState(false);
+  const [selectedFarm, setSelectedFarm] = useState(null);
+  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [authMode, setAuthMode] = useState('login');
 
   const timeframes = ['1M', '3M', '6M', '1Y', '2Y', 'All'];
 
   const handleInvest = useCallback((farmId) => {
+    if (!wallet) {
+      setShowWalletConnect(true);
+      return;
+    }
+    
     const farm = farmListings.find(f => f.id === farmId);
     if (farm) {
-      alert(`Investing in ${farm.name}. Minimum investment: ${farm.minInvestment}`);
-      // Here you would typically handle the investment logic
+      setSelectedFarm(farm);
+      setShowInvestmentModal(true);
     }
+  }, [wallet]);
+
+  const handleConnectWallet = useCallback(() => {
+    setShowWalletConnect(true);
   }, []);
 
+  const handleWalletConnect = useCallback((walletData) => {
+    setWallet({
+      ...walletData,
+      address: 'rdmx6-jaaaa-aaaah-qcaiq-cai', // Mock address
+      balance: 6526.00
+    });
+    setShowWalletConnect(false);
+  }, []);
+
+  const handleWalletDisconnect = useCallback(() => {
+    setWallet(null);
+  }, []);
+
+  const handleInvestmentComplete = useCallback((investmentData) => {
+    console.log('Investment completed:', investmentData);
+    // Here you would typically update the user's portfolio
+    alert(`Successfully invested ${investmentData.currency} ${investmentData.amount} in ${selectedFarm.name}! You received ${investmentData.tokens} farm tokens.`);
+  }, [selectedFarm]);
   const handleListFarm = useCallback(() => {
-    alert('Redirecting to farm listing form...');
-    // Here you would typically navigate to a farm listing form
+    setCurrentPage('farm-listing');
   }, []);
 
   const handleBrowseInvestments = useCallback(() => {
-    alert('Browsing all available investments...');
-    // Here you would typically filter or navigate to investments page
+    setCurrentPage('all-investments');
   }, []);
 
   const handleMarketAnalysis = useCallback(() => {
-    alert('Opening market analysis dashboard...');
-    // Here you would typically navigate to market analysis page
+    setCurrentPage('market-analysis');
+  }, []);
+
+  const handleMyInvestments = useCallback(() => {
+    setCurrentPage('my-investments');
+  }, []);
+
+  const handleBackToDashboard = useCallback(() => {
+    setCurrentPage('dashboard');
+  }, []);
+
+  const handleLogin = useCallback(() => {
+    setCurrentPage('auth');
+    setAuthMode('login');
+  }, []);
+
+  const handleSignup = useCallback(() => {
+    setCurrentPage('auth');
+    setAuthMode('signup');
+  }, []);
+
+  const handleSupplyChain = useCallback(() => {
+    setCurrentPage('supply-chain');
+  }, []);
+
+  const handleChat = useCallback(() => {
+    setCurrentPage('chat');
   }, []);
 
   return {
@@ -35,14 +91,33 @@ export const useInvestments = () => {
     setActiveTimeframe,
     activeTab,
     setActiveTab,
+    wallet,
+    showWalletConnect,
+    setShowWalletConnect,
+    showInvestmentModal,
+    setShowInvestmentModal,
+    selectedFarm,
+    currentPage,
+    authMode,
+    setAuthMode,
     timeframes,
     farmListings,
     myInvestments,
     investmentData,
     cropYieldData,
     handleInvest,
+    handleConnectWallet,
+    handleWalletConnect,
+    handleWalletDisconnect,
+    handleInvestmentComplete,
     handleListFarm,
     handleBrowseInvestments,
     handleMarketAnalysis,
+    handleMyInvestments,
+    handleBackToDashboard,
+    handleLogin,
+    handleSignup,
+    handleSupplyChain,
+    handleChat,
   };
 };
