@@ -1,7 +1,7 @@
 import React from 'react';
-import { MapPin, DollarSign } from 'lucide-react';
+import { MapPin, DollarSign, Coins } from 'lucide-react';
 
-export const FarmCard = ({ farm, onInvest }) => {
+export const FarmCard = ({ farm, onInvest, hasWallet }) => {
   const IconComponent = farm.icon;
 
   return (
@@ -56,10 +56,24 @@ export const FarmCard = ({ farm, onInvest }) => {
         
         <button 
           onClick={() => onInvest(farm.id)}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+          disabled={!hasWallet}
+          className={`w-full py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 ${
+            hasWallet 
+              ? 'bg-green-600 hover:bg-green-700 text-white' 
+              : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+          }`}
         >
-          <DollarSign className="w-4 h-4" />
-          <span>Invest Now</span>
+          {hasWallet ? (
+            <>
+              <Coins className="w-4 h-4" />
+              <span>Invest & Get Tokens</span>
+            </>
+          ) : (
+            <>
+              <DollarSign className="w-4 h-4" />
+              <span>Connect Wallet to Invest</span>
+            </>
+          )}
         </button>
       </div>
     </div>

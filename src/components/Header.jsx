@@ -1,7 +1,7 @@
 import React from 'react';
 import { Search, Sprout } from 'lucide-react';
 
-export const Header = ({ onListFarm }) => {
+export const Header = ({ onListFarm, onMyInvestments, onMarketAnalysis, onBrowseInvestments }) => {
   return (
     <header className="bg-gray-800 border-b border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,11 +13,25 @@ export const Header = ({ onListFarm }) => {
               <span className="text-2xl font-bold text-white">M-Shamba</span>
             </div>
             <nav className="hidden md:flex space-x-6">
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">Dashboard</a>
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">Farm Listings</a>
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">My Investments</a>
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">Market Prices</a>
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">Analytics</a>
+              <button className="text-gray-300 hover:text-white transition-colors">Dashboard</button>
+              <button 
+                onClick={onBrowseInvestments}
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                Farm Listings
+              </button>
+              <button 
+                onClick={onMyInvestments}
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                My Investments
+              </button>
+              <button 
+                onClick={onMarketAnalysis}
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                Market Analysis
+              </button>
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Support</a>
             </nav>
           </div>

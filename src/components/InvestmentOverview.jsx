@@ -31,10 +31,10 @@ export const InvestmentOverview = ({
             <button
               key={timeframe}
               onClick={() => onTimeframeChange(timeframe)}
-              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 activeTimeframe === timeframe
                   ? 'bg-green-600 text-white'
-                  : 'text-gray-400 hover:text-white'
+                  : 'bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600'
               }`}
             >
               {timeframe}

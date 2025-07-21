@@ -5,6 +5,9 @@ import { TabNavigation } from './components/TabNavigation';
 import { FarmCard } from './components/FarmCard';
 import { CropYieldsChart } from './components/CropYieldsChart';
 import { Sidebar } from './components/Sidebar';
+import { WalletConnect } from './components/WalletConnect';
+import { WalletDashboard } from './components/WalletDashboard';
+import { InvestmentModal } from './components/InvestmentModal';
 import { useInvestments } from './hooks/useInvestments';
 import './styles/globals.css';
 
@@ -14,12 +17,22 @@ function App() {
     setActiveTimeframe,
     activeTab,
     setActiveTab,
+    wallet,
+    showWalletConnect,
+    setShowWalletConnect,
+    showInvestmentModal,
+    setShowInvestmentModal,
+    selectedFarm,
     timeframes,
     farmListings,
     myInvestments,
     investmentData,
     cropYieldData,
     handleInvest,
+    handleConnectWallet,
+    handleWalletConnect,
+    handleWalletDisconnect,
+    handleInvestmentComplete,
     handleListFarm,
     handleBrowseInvestments,
     handleMarketAnalysis,
@@ -33,6 +46,18 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-3">
+            {/* Wallet Dashboard */}
+            {wallet && (
+              <div className="mb-8">
+                <WalletDashboard 
+                  wallet={wallet}
+                  onDeposit={() => alert('Deposit feature coming soon!')}
+                  onWithdraw={() => alert('Withdraw feature coming soon!')}
+                  onDisconnect={handleWalletDisconnect}
+                />
+              </div>
+            )}
+
             <InvestmentOverview
               data={investmentData}
               activeTimeframe={activeTimeframe}
@@ -53,6 +78,7 @@ function App() {
                     key={farm.id}
                     farm={farm}
                     onInvest={handleInvest}
+                    hasWallet={!!wallet}
                   />
                 ))}
               </div>
@@ -69,13 +95,32 @@ function App() {
           <div>
             <Sidebar
               myInvestments={myInvestments}
+              wallet={wallet}
               onListFarm={handleListFarm}
               onBrowseInvestments={handleBrowseInvestments}
               onMarketAnalysis={handleMarketAnalysis}
+              onConnectWallet={handleConnectWallet}
             />
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <WalletConnect
+        isOpen={showWalletConnect}
+        onClose={() => setShowWalletConnect(false)}
+        onConnect={handleWalletConnect}
+      />
+
+      {showInvestmentModal && selectedFarm && (
+        <InvestmentModal
+          farm={selectedFarm}
+          isOpen={showInvestmentModal}
+          onClose={() => setShowInvestmentModal(false)}
+          onInvest={handleInvestmentComplete}
+          walletBalance={wallet?.balance || 0}
+        />
+      )}
     </div>
   );
 }

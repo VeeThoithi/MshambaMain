@@ -1,14 +1,49 @@
 import React from 'react';
-import { Sprout, DollarSign, TrendingUp, Wheat } from 'lucide-react';
+import { Sprout, DollarSign, TrendingUp, Wheat, Wallet } from 'lucide-react';
 
 export const Sidebar = ({
   myInvestments,
   onListFarm,
   onBrowseInvestments,
-  onMarketAnalysis
+  onMarketAnalysis,
+  onSupplyChain,
+  onChat,
+  onConnectWallet,
+  wallet
 }) => {
   return (
     <div className="space-y-6">
+      {/* Wallet Section */}
+      {!wallet ? (
+        <div className="bg-gray-800 rounded-xl p-6">
+          <h3 className="text-lg font-semibold mb-4">Connect Wallet</h3>
+          <div className="text-sm text-gray-400 mb-4">
+            Connect your wallet to start investing in farms and receive tokens
+          </div>
+          <button 
+            onClick={onConnectWallet}
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+          >
+            <Wallet className="w-4 h-4" />
+            <span>Connect Wallet</span>
+          </button>
+        </div>
+      ) : (
+        <div className="bg-gray-800 rounded-xl p-6">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+              <Wallet className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <div className="font-medium">{wallet.name}</div>
+              <div className="text-sm text-gray-400">Connected</div>
+            </div>
+          </div>
+          <div className="text-sm text-green-400 font-medium">
+            Total Balance: $6,526.00
+          </div>
+        </div>
+      )}
       {/* Quick Actions */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
@@ -33,6 +68,20 @@ export const Sidebar = ({
           >
             <TrendingUp className="w-4 h-4" />
             <span>Market Analysis</span>
+          </button>
+          <button 
+            onClick={onSupplyChain}
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+          >
+            <TrendingUp className="w-4 h-4" />
+            <span>Supply Chain</span>
+          </button>
+          <button 
+            onClick={onChat}
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+          >
+            <TrendingUp className="w-4 h-4" />
+            <span>Messages</span>
           </button>
         </div>
       </div>
@@ -74,7 +123,10 @@ export const Sidebar = ({
             </div>
           ))}
         </div>
-        <button className="w-full mt-4 text-green-400 hover:text-green-300 text-sm font-medium transition-colors">
+        <button 
+          onClick={() => alert('View All Investments clicked')}
+          className="w-full mt-4 text-green-400 hover:text-green-300 text-sm font-medium transition-colors"
+        >
           View All Investments →
         </button>
       </div>
