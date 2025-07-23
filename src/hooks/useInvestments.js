@@ -86,6 +86,10 @@ export const useInvestments = () => {
     setCurrentPage('chat');
   }, []);
 
+  const handleFarmerRecords = useCallback(() => {
+    setCurrentPage('farmer-records');
+  }, []);
+
   return {
     activeTimeframe,
     setActiveTimeframe,
@@ -119,5 +123,6 @@ export const useInvestments = () => {
     handleSignup,
     handleSupplyChain,
     handleChat,
+    handleFarmerRecords,
   };
 };

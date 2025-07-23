@@ -14,7 +14,7 @@ import { AllInvestments } from './pages/AllInvestments';
 import { MyInvestments } from './pages/MyInvestments';
 import { Auth } from './pages/Auth';
 import { SupplyChain } from './pages/SupplyChain';
-import { Chat } from './pages/Chat';
+import { FarmerRecords } from './pages/FarmerRecords';
 import { useInvestments } from './hooks/useInvestments';
 import './styles/globals.css';
 
@@ -52,6 +52,7 @@ function App() {
     handleSignup,
     handleSupplyChain,
     handleChat,
+    handleFarmerRecords,
   } = useInvestments();
 
   // Render different pages based on currentPage state
@@ -69,8 +70,8 @@ function App() {
     return <SupplyChain onBack={handleBackToDashboard} />;
   }
 
-  if (currentPage === 'chat') {
-    return <Chat onBack={handleBackToDashboard} />;
+  if (currentPage === 'farmer-records') {
+    return <FarmerRecords onBack={handleBackToDashboard} />;
   }
 
   if (currentPage === 'farm-listing') {
@@ -105,6 +106,7 @@ function App() {
         onBrowseInvestments={handleBrowseInvestments}
         onSupplyChain={handleSupplyChain}
         onChat={handleChat}
+        onFarmerRecords={handleFarmerRecords}
         onLogin={handleLogin}
         onSignup={handleSignup}
       />
@@ -168,6 +170,7 @@ function App() {
               onMarketAnalysis={handleMarketAnalysis}
               onSupplyChain={handleSupplyChain}
               onChat={handleChat}
+              onFarmerRecords={handleFarmerRecords}
               onConnectWallet={handleConnectWallet}
             />
           </div>

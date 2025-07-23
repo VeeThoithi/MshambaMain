@@ -1,7 +1,7 @@
 import React from 'react';
 import { Search, Sprout } from 'lucide-react';
 
-export const Header = ({ onListFarm, onMyInvestments, onMarketAnalysis, onBrowseInvestments, onSupplyChain, onChat, onLogin, onSignup }) => {
+export const Header = ({ onListFarm, onMyInvestments, onMarketAnalysis, onBrowseInvestments, onSupplyChain, onFarmerRecords, onLogin, onSignup }) => {
   return (
     <header className="bg-gray-800 border-b border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,10 +39,10 @@ export const Header = ({ onListFarm, onMyInvestments, onMarketAnalysis, onBrowse
                 Supply Chain
               </button>
               <button 
-                onClick={onChat}
+                onClick={onFarmerRecords}
                 className="text-gray-300 hover:text-white transition-colors"
               >
-                Messages
+                Farm Records
               </button>
             </nav>
           </div>

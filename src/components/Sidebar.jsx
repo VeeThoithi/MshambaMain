@@ -8,6 +8,7 @@ export const Sidebar = ({
   onMarketAnalysis,
   onSupplyChain,
   onChat,
+  onFarmerRecords,
   onConnectWallet,
   wallet
 }) => {
@@ -77,11 +78,11 @@ export const Sidebar = ({
             <span>Supply Chain</span>
           </button>
           <button 
-            onClick={onChat}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+            onClick={onFarmerRecords}
+            className="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
           >
             <TrendingUp className="w-4 h-4" />
-            <span>Messages</span>
+            <span>Farm Records</span>
           </button>
         </div>
       </div>
