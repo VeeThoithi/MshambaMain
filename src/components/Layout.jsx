@@ -17,7 +17,7 @@ const Layout = ({ children, userType }) => {
   const location = useLocation();
   
   const farmerNavItems = [
-    { path: '/farmer/dashboard', icon: LayoutDashboard, label: 'Farm Profile' },
+    { path: '/farmer/dashboard/profile', icon: LayoutDashboard, label: 'Farm Profile' },
     { path: '/farmer/dashboard/records', icon: FileText, label: 'Farm Records' },
     { path: '/farmer/dashboard/setup-investment', icon: DollarSign, label: 'Setup Investment' },
     { path: '/farmer/dashboard/valuation', icon: TrendingUp, label: 'Valuation Report' },

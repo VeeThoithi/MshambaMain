@@ -7,13 +7,14 @@ import { Auth } from "./pages/Auth";
 import ProfileSelection from "./pages/ProfileSelection";
 
 // Farmer pages
-import FarmerDashboard from "./pages/farmer/FarmerDashboard";  // ← Uncomment this line
-import FarmerProfile from "./pages/farmer/FarmListing";
+import FarmerDashboard from "./pages/farmer/FarmerDashboard";  
+import FarmListing from "./pages/farmer/FarmListing";
 import FarmRecords from "./pages/farmer/FarmerRecords";
 import SetupInvestment from "./pages/farmer/SetupInvestment";
 import ValuationReport from "./pages/farmer/ValuationReport";
 import InvestorsList from "./pages/farmer/InvestorsList";
 import FarmGraphs from "./pages/farmer/FarmGraphs";
+
 
 // Investor pages
 import InvestorDashboard from "./pages/investor/InvestorDashboard";
@@ -28,11 +29,13 @@ function App() {
         {/* General Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/profile" element={<FarmListing />} /> 
         <Route path="/profile-selection" element={<ProfileSelection />} />
 
         {/* Farmer Routes */}
         <Route path="/farmer/dashboard" element={<FarmerDashboard />}>
-          <Route path="profile" element={<FarmerProfile />} />
+        <Route index element={<FarmListing />} /> 
+        <Route path="profile" element={<FarmListing />} /> 
           <Route path="records" element={<FarmRecords />} />
           <Route path="setup-investment" element={<SetupInvestment />} />
           <Route path="valuation" element={<ValuationReport />} />
