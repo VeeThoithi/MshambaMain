@@ -341,3 +341,4 @@ export const MarketAnalysis = ({ onBack }) => {
     </div>
   );
 };
+export default MarketAnalysis;

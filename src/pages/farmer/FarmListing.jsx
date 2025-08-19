@@ -304,3 +304,4 @@ export const FarmListing = ({ onBack }) => {
     </div>
   );
 };
+export default FarmListing;

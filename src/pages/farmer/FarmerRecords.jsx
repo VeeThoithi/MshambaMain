@@ -415,3 +415,4 @@ export const FarmerRecords = ({ onBack }) => {
 
   return null;
 };
+export default FarmerRecords;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Search, Filter, MapPin, DollarSign, TrendingUp, Clock } from 'lucide-react';
-import { FarmCard } from '../components/FarmCard';
-import { farmListings } from '../data/farmData';
+import { FarmCard } from '../../components/FarmCard';
+import { farmListings } from '../../data/farmData';
 
 export const AllInvestments = ({ onBack, onInvest, hasWallet }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,9 +17,7 @@ export const AllInvestments = ({ onBack, onInvest, hasWallet }) => {
   ];
 
   const sortOptions = [
-    { value: 'roi', label: 'Highest ROI' },
     { value: 'investment', label: 'Lowest Investment' },
-    { value: 'duration', label: 'Shortest Duration' },
     { value: 'newest', label: 'Newest Listed' },
   ];
 
@@ -36,12 +34,8 @@ export const AllInvestments = ({ onBack, onInvest, hasWallet }) => {
 
   const sortedFarms = [...filteredFarms].sort((a, b) => {
     switch (sortBy) {
-      case 'roi':
-        return parseFloat(b.expectedReturn) - parseFloat(a.expectedReturn);
       case 'investment':
         return parseFloat(a.minInvestment.replace(/[$,]/g, '')) - parseFloat(b.minInvestment.replace(/[$,]/g, ''));
-      case 'duration':
-        return parseFloat(a.duration) - parseFloat(b.duration);
       default:
         return 0;
     }
@@ -66,7 +60,7 @@ export const AllInvestments = ({ onBack, onInvest, hasWallet }) => {
               <DollarSign className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Browse All Investments</h1>
+              <h1 className="text-3xl font-bold">Browse All Farms available to <Invest></Invest></h1>
               <p className="text-gray-400">Discover profitable agricultural investment opportunities</p>
             </div>
           </div>
@@ -163,3 +157,4 @@ export const AllInvestments = ({ onBack, onInvest, hasWallet }) => {
     </div>
   );
 };
+export default AllInvestments;

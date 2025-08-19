@@ -33,14 +33,7 @@ export const FarmCard = ({ farm, onInvest, hasWallet }) => {
             <div className="text-gray-400">Crop Type</div>
             <div className="font-medium">{farm.crop}</div>
           </div>
-          <div>
-            <div className="text-gray-400">Expected ROI</div>
-            <div className="font-medium text-green-400">{farm.expectedReturn}</div>
-          </div>
-          <div>
-            <div className="text-gray-400">Duration</div>
-            <div className="font-medium">{farm.duration}</div>
-          </div>
+          
         </div>
         
         <div className="flex items-center justify-between mb-4">
@@ -55,26 +48,12 @@ export const FarmCard = ({ farm, onInvest, hasWallet }) => {
         </div>
         
         <button 
-          onClick={() => onInvest(farm.id)}
-          disabled={!hasWallet}
-          className={`w-full py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 ${
-            hasWallet 
-              ? 'bg-green-600 hover:bg-green-700 text-white' 
-              : 'bg-gray-600 text-gray-400 cursor-not-allowed'
-          }`}
-        >
-          {hasWallet ? (
-            <>
-              <Coins className="w-4 h-4" />
-              <span>Invest & Get Tokens</span>
-            </>
-          ) : (
-            <>
-              <DollarSign className="w-4 h-4" />
-              <span>Connect Wallet to Invest</span>
-            </>
-          )}
-        </button>
+  onClick={() => onInvest(farm.id)} 
+  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+>
+  Invest
+</button>
+
       </div>
     </div>
   );
