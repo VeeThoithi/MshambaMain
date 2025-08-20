@@ -1,412 +1,139 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Upload, FileText, DollarSign, TrendingUp, Calendar, BookOpen, Sprout } from 'lucide-react';
 
-export const FarmerRecords = ({ onBack }) => {
-  const [currentView, setCurrentView] = useState('books'); // books, categories, subcategories, inputs
+const categories = {
+  inputs: { name: 'Inputs', icon: Sprout, color: 'bg-green-500', items: ['Seeds', 'Fertilizers', 'Pesticides', 'Tools'] },
+  labor: { name: 'Labor', icon: FileText, color: 'bg-blue-500', items: ['Planting', 'Weeding', 'Harvesting', 'General'] },
+  opex: { name: 'OpEx', icon: DollarSign, color: 'bg-purple-500', items: ['Transport', 'Storage', 'Processing', 'Marketing'] },
+  yields: { name: 'Yields', icon: TrendingUp, color: 'bg-orange-500', items: ['Harvest Records', 'Quality Assessment', 'Storage'] },
+  sales: { name: 'Sales', icon: DollarSign, color: 'bg-indigo-500', items: ['Direct Sales', 'Market Sales', 'Contract Sales'] }
+};
+
+export const FarmerRecords = ({ onBack, onSaveRecord }) => {
+  const [view, setView] = useState('books'); // books, categories, subcategories, inputs
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
-  const [selectedPeriod, setSelectedPeriod] = useState({ from: '2024-01-01', to: '2024-12-31' });
+  const [formData, setFormData] = useState({ name: '', cost: '', date: '', supplier: '', description: '' });
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    cost: '',
-    description: '',
-    date: '',
-    quantity: '',
-    supplier: ''
-  });
+  const [dateRange, setDateRange] = useState({ from: '2024-01-01', to: '2024-12-31' });
 
-  const categories = {
-    inputs: { name: 'Inputs', icon: Sprout, color: 'bg-green-600', items: ['Seeds', 'Fertilizers', 'Pesticides', 'Tools'] },
-    labor: { name: 'Labor', icon: FileText, color: 'bg-blue-600', items: ['Planting', 'Weeding', 'Harvesting', 'General'] },
-    opex: { name: 'OpEx', icon: DollarSign, color: 'bg-purple-600', items: ['Transport', 'Storage', 'Processing', 'Marketing'] },
-    yields: { name: 'Yields', icon: TrendingUp, color: 'bg-yellow-600', items: ['Harvest Records', 'Quality Assessment', 'Storage'] },
-    sales: { name: 'Sales', icon: DollarSign, color: 'bg-indigo-600', items: ['Direct Sales', 'Market Sales', 'Contract Sales'] }
+  const handleInputChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleFileUpload = e => setUploadedFiles([...uploadedFiles, ...Array.from(e.target.files)]);
+
+  const handleSubmit = async () => {
+    if (!selectedCategory || !selectedSubcategory) return;
+    const payload = { category: selectedCategory, subcategory: selectedSubcategory, ...formData, files: uploadedFiles };
+    try {
+      await onSaveRecord(payload);
+      setFormData({ name: '', cost: '', date: '', supplier: '', description: '' });
+      setUploadedFiles([]);
+      setView('categories');
+    } catch (err) {
+      console.error('Error saving record:', err);
+    }
   };
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  // Books View
+  if (view === 'books') return (
+    <div className="min-h-screen bg-gray-50 text-gray-900 p-6">
+      <button onClick={onBack} className="flex items-center space-x-2 text-green-600 mb-6">
+        <ArrowLeft /> Back to Dashboard
+      </button>
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const categoryName = categories[selectedCategory]?.name || selectedCategory;
-    alert(`${categoryName} record added successfully!`);
-    setCurrentView('categories');
-    setFormData({
-      name: '',
-      cost: '',
-      description: '',
-      date: '',
-      quantity: '',
-      supplier: ''
-    });
-  };
-
-  const handleDateRangeChange = (field, value) => {
-    setSelectedPeriod({
-      ...selectedPeriod,
-      [field]: value
-    });
-  };
-
-  // Main Books Page
-  if (currentView === 'books') {
-    return (
-      <div className="min-h-screen bg-gray-900 text-white w-full">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="flex items-center mb-8">
-            <button 
-              onClick={onBack}
-              className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Dashboard</span>
-            </button>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-green-500 rounded flex items-center justify-center">
+            <BookOpen className="w-6 h-6 text-white" />
           </div>
-
-          <div className="mb-8">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold">Farm Record Books</h1>
-                <p className="text-gray-400">Manage your farm records, expenses, and progress tracking</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gray-800 rounded-xl p-8 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-semibold mb-8 text-center">Books</h2>
-            
-            <div className="space-y-6">
-              <button 
-                onClick={() => setCurrentView('categories')}
-                className="w-full bg-green-600 hover:bg-green-700 py-4 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-3 text-lg"
-              >
-                <FileText className="w-6 h-6" />
-                <span>Enter Records</span>
-              </button>
-              
-              <button className="w-full bg-blue-600 hover:bg-blue-700 py-4 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-3 text-lg">
-                <Upload className="w-6 h-6" />
-                <span>Upload Images</span>
-              </button>
-              
-              <button className="w-full bg-purple-600 hover:bg-purple-700 py-4 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-3 text-lg">
-                <Upload className="w-6 h-6" />
-                <span>Upload CSV</span>
-              </button>
-            </div>
-
-            {/* Date Range Picker */}
-            <div className="mt-8 pt-6 border-t border-gray-700">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium">Date Range</h3>
-                <button 
-                  onClick={() => setShowDatePicker(!showDatePicker)}
-                  className="text-green-400 hover:text-green-300 transition-colors"
-                >
-                  <Calendar className="w-5 h-5" />
-                </button>
-              </div>
-              
-              {showDatePicker && (
-                <div className="space-y-4 bg-gray-700 p-4 rounded-lg">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">From Date</label>
-                    <input
-                      type="date"
-                      value={selectedPeriod.from}
-                      onChange={(e) => handleDateRangeChange('from', e.target.value)}
-                      className="w-full bg-gray-600 border border-gray-500 rounded-lg px-3 py-2 focus:outline-none focus:border-green-500 text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">To Date</label>
-                    <input
-                      type="date"
-                      value={selectedPeriod.to}
-                      onChange={(e) => handleDateRangeChange('to', e.target.value)}
-                      className="w-full bg-gray-600 border border-gray-500 rounded-lg px-3 py-2 focus:outline-none focus:border-green-500 text-white"
-                    />
-                  </div>
-                  <button 
-                    onClick={() => setShowDatePicker(false)}
-                    className="w-full bg-green-600 hover:bg-green-700 py-2 rounded-lg text-sm transition-colors"
-                  >
-                    Apply Date Range
-                  </button>
-                </div>
-              )}
-              
-              <div className="text-sm text-gray-400 mt-2">
-                Current Range: {new Date(selectedPeriod.from).toLocaleDateString()} - {new Date(selectedPeriod.to).toLocaleDateString()}
-              </div>
-            </div>
+          <div>
+            <h1 className="text-3xl font-bold">Farm Record Books</h1>
+            <p className="text-gray-600">Manage your farm records, expenses, and yields</p>
           </div>
         </div>
-      </div>
-    );
-  }
 
-  // Categories Overview View
-  if (currentView === 'categories') {
-    return (
-      <div className="min-h-screen bg-gray-900 text-white w-full">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="flex items-center mb-8">
-            <button 
-              onClick={() => setCurrentView('books')}
-              className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Books</span>
-            </button>
-          </div>
-
-          <div className="mb-8">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                <FileText className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold">Record Categories</h1>
-                <p className="text-gray-400">Select a category to add records</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gray-800 rounded-xl p-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold">Categories</h2>
-              <div className="text-sm text-gray-400">
-                Period: {new Date(selectedPeriod.from).toLocaleDateString()} - {new Date(selectedPeriod.to).toLocaleDateString()}
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-              {Object.entries(categories).map(([key, category]) => {
-                const IconComponent = category.icon;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => {
-                      setSelectedCategory(key);
-                      setCurrentView('subcategories');
-                    }}
-                    className={`${category.color} hover:opacity-80 p-6 rounded-lg transition-all transform hover:scale-105`}
-                  >
-                    <div className="flex flex-col items-center space-y-3">
-                      <IconComponent className="w-8 h-8 text-white" />
-                      <span className="font-medium text-white text-lg">{category.name}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Summary Stats */}
-            <div className="bg-blue-600 bg-opacity-20 border border-blue-600 rounded-lg p-4">
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-sm text-blue-400">Revenue:</div>
-                  <div className="font-bold text-blue-400">KSh 450,000</div>
-                </div>
-                <div>
-                  <div className="text-sm text-blue-400">Income:</div>
-                  <div className="font-bold text-blue-400">KSh 125,000</div>
-                </div>
-                <div>
-                  <div className="text-sm text-blue-400">Expenses:</div>
-                  <div className="font-bold text-blue-400">KSh 85,000</div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button onClick={() => setView('categories')} className="bg-green-500 text-white py-4 rounded-lg shadow hover:bg-green-600 flex items-center justify-center space-x-2">
+            <FileText /> <span>Enter Records</span>
+          </button>
+          <button onClick={() => document.getElementById('image-upload').click()} className="bg-blue-500 text-white py-4 rounded-lg shadow hover:bg-blue-600 flex items-center justify-center space-x-2">
+            <Upload /> <span>Upload Images</span>
+          </button>
+          <button onClick={() => document.getElementById('csv-upload').click()} className="bg-purple-500 text-white py-4 rounded-lg shadow hover:bg-purple-600 flex items-center justify-center space-x-2">
+            <Upload /> <span>Upload CSV</span>
+          </button>
         </div>
+
+        <input id="image-upload" type="file" multiple accept="image/*" className="hidden" onChange={handleFileUpload} />
+        <input id="csv-upload" type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
       </div>
-    );
-  }
+    </div>
+  );
+
+  // Categories View
+  if (view === 'categories') return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <button onClick={() => setView('books')} className="flex items-center space-x-2 text-green-600 mb-6">
+        <ArrowLeft /> Back to Books
+      </button>
+
+      <h1 className="text-3xl font-bold mb-6">Select Category</h1>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {Object.entries(categories).map(([key, cat]) => {
+          const Icon = cat.icon;
+          return (
+            <button key={key} onClick={() => { setSelectedCategory(key); setView('subcategories'); }}
+              className={`${cat.color} p-6 rounded-lg shadow hover:scale-105 transform transition flex flex-col items-center`}>
+              <Icon className="w-6 h-6 text-white mb-2" />
+              <span className="text-white font-medium">{cat.name}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   // Subcategories View
-  if (currentView === 'subcategories') {
-    const category = categories[selectedCategory];
-    const IconComponent = category?.icon || FileText;
-
+  if (view === 'subcategories') {
+    const cat = categories[selectedCategory];
     return (
-      <div className="min-h-screen bg-gray-900 text-white w-full">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="flex items-center mb-8">
-            <button 
-              onClick={() => setCurrentView('categories')}
-              className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Categories</span>
-            </button>
-          </div>
-
-          <div className="bg-gray-800 rounded-xl p-8">
-            <div className="flex items-center space-x-3 mb-8">
-              <div className={`w-12 h-12 ${category?.color} rounded-lg flex items-center justify-center`}>
-                <IconComponent className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold">{category?.name} Records</h1>
-                <p className="text-gray-400">Select a subcategory to add records</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {category?.items.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setSelectedSubcategory(item);
-                    setCurrentView('inputs');
-                  }}
-                  className="bg-gray-700 hover:bg-gray-600 p-6 rounded-lg transition-colors text-center group"
-                >
-                  <div className="font-medium group-hover:text-green-400 transition-colors">{item}</div>
-                </button>
-              ))}
-            </div>
-          </div>
+      <div className="min-h-screen bg-gray-50 p-6">
+        <button onClick={() => setView('categories')} className="flex items-center space-x-2 text-green-600 mb-6">
+          <ArrowLeft /> Back to Categories
+        </button>
+        <h1 className="text-3xl font-bold mb-6">{cat.name} Subcategories</h1>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {cat.items.map((sub, idx) => (
+            <button key={idx} onClick={() => { setSelectedSubcategory(sub); setView('inputs'); }}
+              className="bg-gray-100 p-6 rounded-lg shadow hover:bg-gray-200">{sub}</button>
+          ))}
         </div>
       </div>
     );
   }
 
   // Input Form View
-  if (currentView === 'inputs') {
-    const category = categories[selectedCategory];
-    const IconComponent = category?.icon || FileText;
-
+  if (view === 'inputs') {
+    const cat = categories[selectedCategory];
     return (
-      <div className="min-h-screen bg-gray-900 text-white w-full">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="flex items-center mb-8">
-            <button 
-              onClick={() => setCurrentView('subcategories')}
-              className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Subcategories</span>
-            </button>
-          </div>
+      <div className="min-h-screen bg-gray-50 p-6">
+        <button onClick={() => setView('subcategories')} className="flex items-center space-x-2 text-green-600 mb-6">
+          <ArrowLeft /> Back to Subcategories
+        </button>
+        <h1 className="text-3xl font-bold mb-4">Add {cat.name} Record - {selectedSubcategory}</h1>
 
-          <div className="bg-gray-800 rounded-xl p-8">
-            <div className="flex items-center space-x-3 mb-8">
-              <div className={`w-12 h-12 ${category?.color} rounded-lg flex items-center justify-center`}>
-                <IconComponent className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold">Add {category?.name} Record</h1>
-                <p className="text-gray-400">Enter the details for {selectedSubcategory}</p>
-              </div>
-            </div>
+        <div className="bg-white p-6 rounded-xl shadow space-y-4 max-w-2xl mx-auto">
+          <input name="name" placeholder="Item Name" value={formData.name} onChange={handleInputChange} className="w-full border px-3 py-2 rounded" />
+          <input name="cost" type="number" placeholder="Cost / Quantity" value={formData.cost} onChange={handleInputChange} className="w-full border px-3 py-2 rounded" />
+          <input name="date" type="date" value={formData.date} onChange={handleInputChange} className="w-full border px-3 py-2 rounded" />
+          <input name="supplier" placeholder="Supplier/Source" value={formData.supplier} onChange={handleInputChange} className="w-full border px-3 py-2 rounded" />
+          <textarea name="description" placeholder="Description" value={formData.description} onChange={handleInputChange} className="w-full border px-3 py-2 rounded" rows={4} />
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Item Name *</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-green-500 transition-colors text-white"
-                    placeholder={`e.g., ${selectedSubcategory}`}
-                  />
-                </div>
+          <input type="file" multiple onChange={handleFileUpload} className="w-full" />
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    {selectedCategory === 'yields' || selectedCategory === 'sales' ? 'Amount/Quantity' : 'Cost'} *
-                  </label>
-                  <input
-                    type="number"
-                    name="cost"
-                    value={formData.cost}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-green-500 transition-colors text-white"
-                    placeholder={selectedCategory === 'yields' ? 'e.g., 2500 kg' : 'e.g., 15000'}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Date *</label>
-                  <input
-                    type="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-green-500 transition-colors text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Supplier/Source</label>
-                  <input
-                    type="text"
-                    name="supplier"
-                    value={formData.supplier}
-                    onChange={handleInputChange}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-green-500 transition-colors text-white"
-                    placeholder="e.g., Local Agro Store"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Description</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-green-500 transition-colors text-white"
-                  placeholder="Additional details about this record..."
-                />
-              </div>
-
-              {/* File Upload */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Attach Receipt/Photo</label>
-                <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-gray-500 transition-colors">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-400 mb-2">Drag and drop files here, or click to browse</p>
-                  <input type="file" multiple accept="image/*,.pdf" className="hidden" />
-                  <button type="button" className="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-lg text-sm transition-colors">
-                    Choose Files
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex space-x-4">
-                <button
-                  type="button"
-                  onClick={() => setCurrentView('subcategories')}
-                  className="flex-1 bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-lg font-medium transition-colors"
-                >
-                  Save Record
-                </button>
-              </div>
-            </form>
+          <div className="flex space-x-4">
+            <button onClick={() => setView('subcategories')} className="flex-1 bg-gray-200 py-2 rounded">Cancel</button>
+            <button onClick={handleSubmit} className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">Save</button>
           </div>
         </div>
       </div>
@@ -415,4 +142,5 @@ export const FarmerRecords = ({ onBack }) => {
 
   return null;
 };
+
 export default FarmerRecords;

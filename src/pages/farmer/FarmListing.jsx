@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 export const FarmListing = ({ onBack }) => {
-  const [farms, setFarms] = useState([]); // stores multiple farms
+  const [farms, setFarms] = useState([]);
   const [formData, setFormData] = useState({
     farmName: "",
     location: "",
@@ -40,11 +40,8 @@ export const FarmListing = ({ onBack }) => {
 
   const handleAddFarm = (e) => {
     e.preventDefault();
-
-    // Add the farm to the local state
     setFarms([...farms, { ...formData, images }]);
 
-    // Reset form
     setFormData({
       farmName: "",
       location: "",
@@ -62,37 +59,38 @@ export const FarmListing = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white w-full">
+    <div className="min-h-screen bg-gray-50 text-gray-900 w-full">
       <div className="max-w-5xl mx-auto px-4 py-8">
+        {/* Back Button */}
         <div className="flex items-center mb-8">
           <button
             onClick={onBack}
-            className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors"
+            className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Dashboard</span>
           </button>
         </div>
 
-        <div className="bg-gray-800 rounded-xl p-8 mb-8">
+        {/* Farm Form */}
+        <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
           <div className="flex items-center space-x-3 mb-8">
-            <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-              <Sprout className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <Sprout className="w-6 h-6 text-green-600" />
             </div>
             <div>
               <h1 className="text-3xl font-bold">Add a Farm</h1>
-              <p className="text-gray-400">
+              <p className="text-gray-500">
                 Fill in the details below and add your farm to the list
               </p>
             </div>
           </div>
 
-          {/* Farm Form */}
           <form onSubmit={handleAddFarm} className="space-y-8">
             {/* Farm Information */}
             <div>
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <MapPin className="w-5 h-5 mr-2 text-green-400" />
+              <h2 className="text-xl font-semibold mb-4 flex items-center text-gray-800">
+                <MapPin className="w-5 h-5 mr-2 text-green-600" />
                 Farm Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -102,7 +100,7 @@ export const FarmListing = ({ onBack }) => {
                   value={formData.farmName}
                   onChange={handleInputChange}
                   placeholder="Farm Name"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 />
                 <input
@@ -111,7 +109,7 @@ export const FarmListing = ({ onBack }) => {
                   value={formData.location}
                   onChange={handleInputChange}
                   placeholder="Location"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 />
                 <input
@@ -120,7 +118,7 @@ export const FarmListing = ({ onBack }) => {
                   value={formData.size}
                   onChange={handleInputChange}
                   placeholder="Farm Size"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <input
                   type="text"
@@ -128,15 +126,15 @@ export const FarmListing = ({ onBack }) => {
                   value={formData.cropType}
                   onChange={handleInputChange}
                   placeholder="Crop Type"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
             </div>
 
             {/* Investment Details */}
             <div>
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <DollarSign className="w-5 h-5 mr-2 text-green-400" />
+              <h2 className="text-xl font-semibold mb-4 flex items-center text-gray-800">
+                <DollarSign className="w-5 h-5 mr-2 text-green-600" />
                 Investment Details
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -146,17 +144,17 @@ export const FarmListing = ({ onBack }) => {
                   value={formData.investmentNeeded}
                   onChange={handleInputChange}
                   placeholder="Investment Needed"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
             </div>
 
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 text-gray-700">
                 Farm Images
               </label>
-              <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                 <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <input
                   type="file"
@@ -168,12 +166,12 @@ export const FarmListing = ({ onBack }) => {
                 />
                 <label
                   htmlFor="image-upload"
-                  className="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-lg cursor-pointer"
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg cursor-pointer"
                 >
                   Choose Images
                 </label>
                 {images.length > 0 && (
-                  <p className="text-green-400 mt-2">
+                  <p className="text-green-600 mt-2">
                     {images.length} image(s) selected
                   </p>
                 )}
@@ -185,13 +183,13 @@ export const FarmListing = ({ onBack }) => {
               <button
                 type="button"
                 onClick={onBack}
-                className="flex-1 bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium"
+                className="flex-1 bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium text-gray-800"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-lg font-medium"
+                className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-lg font-medium text-white"
               >
                 Add Farm
               </button>
@@ -200,20 +198,22 @@ export const FarmListing = ({ onBack }) => {
         </div>
 
         {/* Farm List */}
-        <div className="bg-gray-800 rounded-xl p-8">
-          <h2 className="text-2xl font-bold mb-4">Your Farms</h2>
+        <div className="bg-white rounded-xl shadow-sm border p-8">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Farms</h2>
           {farms.length === 0 ? (
-            <p className="text-gray-400">No farms yet.</p>
+            <p className="text-gray-500">No farms yet.</p>
           ) : (
             <ul className="space-y-4">
               {farms.map((farm, index) => (
                 <li
                   key={index}
-                  className="bg-gray-700 p-4 rounded-lg shadow-md"
+                  className="bg-gray-100 p-4 rounded-lg shadow-sm border"
                 >
-                  <h3 className="font-semibold text-lg">{farm.farmName}</h3>
-                  <p className="text-gray-300">{farm.location}</p>
-                  <p className="text-sm text-gray-400">
+                  <h3 className="font-semibold text-lg text-gray-800">
+                    {farm.farmName}
+                  </h3>
+                  <p className="text-gray-600">{farm.location}</p>
+                  <p className="text-sm text-gray-500">
                     Crop: {farm.cropType || "N/A"} | Size:{" "}
                     {farm.size || "N/A"}
                   </p>
