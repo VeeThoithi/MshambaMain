@@ -46,6 +46,7 @@ function App() {
         {/* Investor Routes */}
         <Route path="/investor/dashboard" element={<InvestorDashboard />}>
           <Route path="profile" element={<InvestorProfile />} />
+          <Route index element={<Farms />} />
           <Route path="farms" element={<Farms />} />
           <Route path="analysis" element={<MarketAnalysis />} />
         </Route>

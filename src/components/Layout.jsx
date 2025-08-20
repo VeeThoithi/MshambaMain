@@ -13,11 +13,11 @@ import {
   MapPin
 } from 'lucide-react';
 
-const Layout = ({ children, userType }) => {
+const Layout = ({ children, userType, userName = "User" }) => {
   const location = useLocation();
   
   const farmerNavItems = [
-    { path: '/farmer/dashboard/profile', icon: LayoutDashboard, label: 'Farm Profile' },
+    { path: '/farmer/dashboard', icon: LayoutDashboard, label: 'Farm Profile' },
     { path: '/farmer/dashboard/records', icon: FileText, label: 'Farm Records' },
     { path: '/farmer/dashboard/setup-investment', icon: DollarSign, label: 'Setup Investment' },
     { path: '/farmer/dashboard/valuation', icon: TrendingUp, label: 'Valuation Report' },
@@ -78,7 +78,7 @@ const Layout = ({ children, userType }) => {
               <User className="h-5 w-5 text-green-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">John Doe</p>
+              <p className="font-medium text-gray-900">{userName}</p>
               <p className="text-sm text-gray-500 capitalize">{userType}</p>
             </div>
           </div>
